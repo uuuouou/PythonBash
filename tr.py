@@ -1,4 +1,4 @@
-#! c:\python34\python
+#! python3
 """
 write by liucz 2015-10-7
 imitate 'tr' command in Linux Shell
@@ -8,7 +8,7 @@ import sys
 import re
 import argparse
 from handle_stdin import echoLines, storeLines
-from handle_string import delete, unique, complement, complementUnique
+from handle_string import delete, unique, complement, complementUnique, escaped
 
 
 def buildParser():
@@ -39,6 +39,10 @@ def buildParser():
 
 def processArgs(args):
 	args.src = args.src[0]
+	# print('src = ', args.src)
+	args.src = escaped(args.src)
+	# print('src = ', args.src)
+	
 	# if args.complement:
 	# 	if not args.delete and args.rep is None:
 	# 		sys.stderr.write('tr.py: rep must be given when translating\n')
@@ -55,6 +59,10 @@ def processArgs(args):
 
 	# check src and rep
 	if args.rep is not None:
+		# print('rep = ', args.rep)
+		args.rep = escaped(args.rep)
+		# print('rep = ', args.rep)
+
 		repLen = len(args.rep)
 		srcLen = len(args.src)
 		if srcLen > repLen:
