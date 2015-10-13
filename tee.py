@@ -7,7 +7,7 @@ import argparse
 
 def buildParser():
 	parser = argparse.ArgumentParser()
-	parser.usage = 'tee [OPTION] [FILE], copy stdin to each FILE, and also to stdout'
+	parser.usage = 'tee.py [OPTION] [FILE], copy stdin to each FILE, and also to stdout'
 	parser.add_argument('-a', '--append',
 						action = 'store_true',
 						help = 'append to the given FILES, do not overwrite')
