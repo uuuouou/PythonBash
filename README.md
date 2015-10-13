@@ -1,2 +1,1 @@
-# PythonBash
-imitate linux bash by python
+implementation of linux shell commands in Python3
