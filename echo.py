@@ -7,6 +7,7 @@ imitate echo in linux shell
 
 import sys
 import argparse
+from handle_string import escaped
 
 
 def buildParser():
@@ -43,53 +44,10 @@ def buildParser():
 	return parser
 
 
-mapping = {
-	'a': '\a',
-	'b': '\b',
-	'f': '\f',
-	'n': '\n',
-	'r': '\r',
-	't': '\t',
-	'v': '\v',
-	'\\': '\\'
-}
-
-
-def escaped(s):
-	i, n = 0, len(s)
-	t = ''
-	while i < n:
-		c = s[i]
-		if c != '\\':
-			t += c
-			i += 1
-		elif i+1 < n and s[i+1] in 'abfnrtv\\':
-			t += mapping[s[i+1]]
-			i += 2
-		elif i+1 < n and s[i+1] in '01234567':
-			num = 0
-			k = i+1
-			for j in range(3):
-				if k < n and s[k] in '01234567':
-					num = (num << 3) + int(s[k])
-					k += 1
-				else:
-					break
-			if num > 127:
-				num = (num - int(s[k-1])) >> 3
-				k -= 1
-			t += chr(num)
-			i = k
-		else:
-			t += c
-			i += 1
-	return t
-
-
 def main():
 	parser = buildParser()
 	args = parser.parse_args()
-	print(args)
+	# print(args)
 	if not args.e:
 		args.E = True
 	if args.E:
