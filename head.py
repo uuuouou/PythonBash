@@ -58,7 +58,7 @@ def processArgs(args):
 	if args.lines:
 		lines = args.lines[0]
 		if not re.match(lines_pattern, lines):
-			sys.stderr.write('head.py: invalid lines count!\n')
+			sys.stderr.write('head.py: invalid lines count\n')
 			return False
 		else:
 			args.skipLines = False
@@ -69,7 +69,7 @@ def processArgs(args):
 	if args.chars:
 		chars = args.chars[0]
 		if not re.match(chars_pattern, chars):
-			sys.stderr.write('head.py: invalid chars count!\n')
+			sys.stderr.write('head.py: invalid chars count\n')
 			return False
 		else:
 			args.skipChars = False
