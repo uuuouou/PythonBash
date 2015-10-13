@@ -1,4 +1,9 @@
-#! python
+#! python3
+"""
+write by liucz 2015-10-8
+imitate 'wc' command in Linux Shell
+"""
+
 import sys
 import re
 import argparse

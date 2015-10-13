@@ -1,4 +1,8 @@
-#! python
+#! python3
+"""
+write by liucz 2015-10-10
+imitate 'tee' command in Linux Shell
+"""
 
 import sys
 import signal

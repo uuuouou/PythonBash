@@ -1,8 +1,7 @@
 #! python3
-#--*- coding:utf-8 -*--
 """
 written by liucz 2015-10-13
-imitate echo in linux shell
+imitate 'echo' in linux shell
 """
 
 import sys

@@ -1,4 +1,4 @@
-#! python
+#! python3
 """
 write by liucz 2015-10-7
 imitate 'uniq' command in Linux Shell

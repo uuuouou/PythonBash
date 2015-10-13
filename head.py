@@ -1,4 +1,4 @@
-#! c:\python34\python
+#! python3
 """
 write by liucz 2015-10-6
 imitate 'head' command in Linux Shell
