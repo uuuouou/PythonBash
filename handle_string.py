@@ -10,8 +10,8 @@ def unique(s, table = None, bench = None):
 	squeeze continuous repeated chars to one
 	
 	@s      -> string to be dealt with
-	@table  -> replace the repeated char to the corresponding target if exist
-	@bench   -> if repeated char not in table and bench is not None then replace the repeated chars to bench
+	@table  -> replace the char to the corresponding target if exist
+	@bench  -> if repeated char not in table and bench is not None then replace the char to bench
 	@return -> string with no continuous repeated chars
 	"""
 	if not s:
@@ -23,10 +23,12 @@ def unique(s, table = None, bench = None):
 
 	for c in s[1:]:
 		if c != lastChar:
-			t += lastChar if not repeated \
-						  else table[lastChar] if table and lastChar in table \
-						  					   else bench if bench is not None \
-						  					   			  else lastChar
+			if lastChar in table:
+				t += table[lastChar]
+			elif bench is not None:
+				t += bench
+			else:
+				t += lastChar
 			lastChar = c
 			repeated = False
 		else:
@@ -49,8 +51,8 @@ def complementUnique(s, keepSet, table = None, bench = None):
 	
 	@s       -> string to be dealt with
 	@keepSet -> chars set whose repetition are keeped
-	@table   -> replace the repeated char to the corresponding target if exist
-	@bench   -> if repeated char not in table and bench is not None then replace the repeated chars to bench
+	@table   -> replace the char to the corresponding target if exist
+	@bench   -> if char not in table and bench is not None then replace the char to bench
 	@return  -> string with no continuous repeated chars except those in keepSet
 	"""
 	if not s:
@@ -64,8 +66,6 @@ def complementUnique(s, keepSet, table = None, bench = None):
 		if c != lastChar:
 			if lastChar in keepSet:
 				t += lastChar * times
-			elif times == 1:
-				t += lastChar
 			elif table and lastChar in table:
 				t += table[lastChar]
 			elif bench is not None:
@@ -130,3 +130,49 @@ def complement(s, keepSet, t):
 	return ''.join((c if c in keepSet 
 					  else t 
 					for c in s))
+
+
+def escaped(s):
+	"""
+	write by liucz 2015-10-7
+	filter backslash-escaped characters as '\a\b\f\n\r\t\v\\\123'
+	for example '\\n' -> '\n'
+	"""
+	mapping = {
+		'a': '\a',
+		'b': '\b',
+		'f': '\f',
+		'n': '\n',
+		'r': '\r',
+		't': '\t',
+		'v': '\v',
+		'\\': '\\'
+	}
+	i, n = 0, len(s)
+	t = ''
+	while i < n:
+		c = s[i]
+		if c != '\\':
+			t += c
+			i += 1
+		elif i+1 < n and s[i+1] in 'abfnrtv\\':
+			t += mapping[s[i+1]]
+			i += 2
+		elif i+1 < n and s[i+1] in '01234567':
+			num = 0
+			k = i+1
+			for j in range(3):
+				if k < n and s[k] in '01234567':
+					num = (num << 3) + int(s[k])
+					k += 1
+				else:
+					break
+			if num > 127:
+				num = (num - int(s[k-1])) >> 3
+				k -= 1
+			t += chr(num)
+			i = k
+		else:
+			t += c
+			i += 1
+	return t
