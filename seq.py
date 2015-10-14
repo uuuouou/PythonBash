@@ -38,7 +38,7 @@ def buildParser():
 						type = str,
 						help = 'use STRING to separate numbers (default \\n)')
 	parser.add_argument('-w', '--equal-width',
-						action = 'store_true'
+						action = 'store_true',
 						help = 'equalize width by padding with leading zeros')
 	parser.add_argument('nums',
 						nargs = '+',
@@ -54,8 +54,33 @@ def processArgs(args):
 		sys.stderr.write('seq.py: format string may not specified when printing equal width strings\n')
 		return False
 
-	args.nums = [float(x) for x in args.nums]
-	
+	precision = 0
+	for s in args.nums:
+		try:
+			_ = float(s)
+			point = s.find('.')
+			if point != -1:
+				precision = max(precision, len(s) - point - 1)
+		except:
+			sys.stderr.write('seq.py: [%s] is an invalid number\n' % s)
+			return False
+
+	n = len(args.nums)
+	if n == 1:
+		args.nums = [1.0, 1.0, float(args.nums[0])]
+	elif n == 2:
+		args.nums = [float(args.nums[0]), 1.0, float(args.nums[1])]
+	else:
+		args.nums = [float(x) for x in args.nums]
+
+	if args.format is None:
+		if precision != 0:
+			args.format = '%%.%df' % precision
+		else:
+			args.format = '%g'
+	if args.separator is None:
+		args.separator = '\n'
+
 	return True
 
 
@@ -65,6 +90,32 @@ def main():
 	print(args)
 	if not processArgs(args):
 		return
+
+	if not args.equal_width:
+		first = True
+		while args.nums[0] <= args.nums[2]:
+			if first:
+				first = False
+			else:
+				print(args.separator, end = '')
+			try:
+				print(args.format % args.nums[0], end = '')
+			except:
+				sys.stderr.write('seq.py: [%s] is an invalid format' % args.format)
+				return
+			args.nums[0] += args.nums[1]
+		print()
+	else:
+		all = []
+		width = 0
+		while args.nums[0] <= args.nums[2]:
+			all.append(args.format % args.nums[0])
+			width = max(width, len(all[-1]) if all[-1][0].isdigit() else len(all[-1]) - 1)
+			args.nums[0] += args.nums[1]
+		if args.format == '%g':
+			print(args.separator.join([s.rjust(width, '0') for s in all]))
+		else:
+			print(args.separator.join(all))
 
 
 if __name__ == '__main__':
